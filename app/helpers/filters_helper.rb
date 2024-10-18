@@ -24,8 +24,9 @@ module FiltersHelper
     @bubble_filter_params ||= params.permit :order_by, :status, assignee_ids: [], tag_ids: []
   end
 
+  # `#view_filter_params` is memoized to avoid spam in logs about unpermitted params
   def view_filter_params
-    bubble_filter_params.merge params.permit :term, :view_id
+    @view_filter_params ||= bubble_filter_params.merge params.permit(:term, :view_id)
   end
 
   def unassigned_filter_activated?
