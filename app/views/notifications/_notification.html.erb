@@ -1,9 +1,12 @@
 <%= notification_tag notification do %>
-  <div class="notification--content shadow">
+  <div class="notification__content border-radius borderless pad shadow fill-white flex align-start txt-align-start gap-half">
     <div class="avatar txt-small">
       <%= avatar_image_tag(notification.creator) %>
     </div>
 
-    <%= notification.body %>
+    <div class="flex flex-column txt-tight-lines">
+      <strong><%= "RE: " if notification.resource.is_a?(Comment) %><%= notification.bubble.title %></strong>
+      <%= notification.body %> · <%= time_ago_in_words(notification.created_at) %> ago
+    </div>
   </div>
 <% end %>

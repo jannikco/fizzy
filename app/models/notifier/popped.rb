@@ -1,6 +1,6 @@
 class Notifier::Popped < Notifier
   private
     def body
-      "popped: #{bubble.title}"
+      "Popped by #{event.creator.name}"
     end
 end

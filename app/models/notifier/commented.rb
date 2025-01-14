@@ -1,7 +1,7 @@
 class Notifier::Commented < Notifier
   private
     def body
-      "commented on: #{bubble.title}"
+      "#{event.creator.name}"
     end
 
     def resource

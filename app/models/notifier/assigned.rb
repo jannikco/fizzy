@@ -1,7 +1,7 @@
 class Notifier::Assigned < Notifier
   private
     def body
-      "assigned you: #{bubble.title}"
+      "#{event.creator.name} assigned to you"
     end
 
     def recipients
