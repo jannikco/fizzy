@@ -12,8 +12,8 @@
             <strong class="bubble__title-text"><%= bubble.title %></strong>
           <% end %>
 
-          <% if bubble.messages.many? %>
-            <span class="translucent txt-nowrap flex-item-no-shrink">(<%= bubble.messages.count %>)</span>
+          <% if bubble.messages.comments.many? %>
+            <span class="translucent txt-nowrap flex-item-no-shrink">(<%= bubble.messages.comments.count %>)</span>
           <% end %>
 
           <span class="flex-item-no-shrink flex">
