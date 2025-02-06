@@ -15,7 +15,7 @@ module NotificationsHelper
     name = notification.creator.name
 
     case notification_event_action(notification)
-    when "popped" then "Popped by by #{name}"
+    when "popped" then "Popped by #{name}"
     when "published" then "Added by #{name}"
     else name
     end
