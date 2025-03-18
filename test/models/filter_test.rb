@@ -20,7 +20,7 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal [ bubbles(:layout) ], filter.bubbles
 
     filter = users(:david).filters.new stage_ids: [ workflow_stages(:qa_maybe).id ]
-    assert_equal [ bubbles(:logo) ], filter.bubbles
+    assert_equal [ bubbles(:logo), @new_bubble ], filter.bubbles
 
     filter = users(:david).filters.new assignment_status: "unassigned", bucket_ids: [ @new_bucket.id ]
     assert_equal [ @new_bubble ], filter.bubbles
@@ -106,7 +106,7 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal "Most discussed, tagged #Mobile, and assigned to JZ ", filters(:jz_assignments).summary
 
     filters(:jz_assignments).update!(stages: workflow_stages(:qa_maybe, :qa_not_now))
-    assert_equal "Most discussed, tagged #Mobile, assigned to JZ, and staged in Triage or In Progress ", filters(:jz_assignments).summary
+    assert_equal "Most discussed, tagged #Mobile, assigned to JZ, and staged in Maybe? or Not now ", filters(:jz_assignments).summary
 
     filters(:jz_assignments).update!(stages: [], assignees: [], tags: [], buckets: [ buckets(:writebook) ])
     assert_equal "Most discussed in Writebook", filters(:jz_assignments).summary

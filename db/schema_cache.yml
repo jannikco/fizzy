@@ -1712,6 +1712,23 @@ indexes:
   pins:
   - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
     table: pins
+    name: index_pins_on_bubble_id_and_user_id
+    unique: true
+    columns:
+    - bubble_id
+    - user_id
+    lengths: {}
+    orders: {}
+    opclasses: {}
+    where:
+    type:
+    using:
+    include:
+    nulls_not_distinct:
+    comment:
+    valid: true
+  - !ruby/object:ActiveRecord::ConnectionAdapters::IndexDefinition
+    table: pins
     name: index_pins_on_user_id
     unique: false
     columns:
