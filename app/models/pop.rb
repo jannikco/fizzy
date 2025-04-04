@@ -3,6 +3,6 @@ class Pop < ApplicationRecord
   belongs_to :user, optional: true
 
   def reason
-    super || Pop::Reason::FALLBACK_LABEL
+    super || Account::PopReasons::FALLBACK_LABEL
   end
 end

@@ -8,10 +8,12 @@ module Account::PopReasons
     "Working as intended"
   ]
 
+  FALLBACK_LABEL = "Done"
+
   included do
     has_many :pop_reasons, dependent: :destroy, class_name: "Pop::Reason" do
       def labels
-        pluck(:label).presence || [ Pop::Reason::FALLBACK_LABEL ]
+        pluck(:label).presence || [ FALLBACK_LABEL ]
       end
     end
 

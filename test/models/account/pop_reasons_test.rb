@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class PopReasonsTest < ActiveSupport::TestCase
   test "create defaults pop reasons on creation" do
