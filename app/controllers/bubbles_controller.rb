@@ -38,8 +38,10 @@ class BubblesController < ApplicationController
   end
 
   private
+    DEFAULT_PARAMS = { indexed_by: "newest" }
+
     def set_filter
-      @filter = Current.user.filters.from_params params.permit(*Filter::PERMITTED_PARAMS)
+      @filter = Current.user.filters.from_params params.reverse_merge(**DEFAULT_PARAMS).permit(*Filter::PERMITTED_PARAMS)
     end
 
     def set_bubble
