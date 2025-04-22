@@ -13,6 +13,6 @@ module Collection::Workflowing
 
   private
     def set_all_cards_to_initial_workflow_stage
-      cards.update_all(stage_id: initial_workflow_stage&.id)
+      cards.update_all(stage_id: initial_workflow_stage.id)
     end
 end
