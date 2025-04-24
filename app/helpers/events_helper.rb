@@ -44,33 +44,50 @@ module EventsHelper
   end
 
   def event_action_sentence(event)
+    if event.action.comment_created?
+      comment_event_action_sentence(event)
+    else
+      card_event_action_sentence(event)
+    end
+  end
+
+  def comment_event_action_sentence(event)
+    "#{ event_creator_name(event) } commented on <span style='color: var(--card-color)'>#{ event.eventable.card.title }</span>".html_safe
+  end
+
+  def event_creator_name(event)
+    event.creator == Current.user ? "You" : event.creator.name
+  end
+
+  def card_event_action_sentence(event)
+    card = event.eventable
+    title = card.title
+
     case event.action
     when "card_assigned"
       if event.assignees.include?(Current.user)
-        "#{ event.creator == Current.user ? "You" : event.creator.name } will handle <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
+        "#{ event_creator_name(event) } will handle <span style='color: var(--card-color)'>#{ title }</span>".html_safe
       else
-        "#{ event.creator == Current.user ? "You" : event.creator.name } assigned #{ event.assignees.pluck(:name).to_sentence } to <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
+        "#{ event_creator_name(event) } assigned #{ event.assignees.pluck(:name).to_sentence } to <span style='color: var(--card-color)'>#{ title }</span>".html_safe
       end
     when "card_unassigned"
-      "#{ event.creator == Current.user ? "You" : event.creator.name } unassigned #{ event.assignees.include?(Current.user) ? "yourself" : event.assignees.pluck(:name).to_sentence } from <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
-    when "comment_created"
-      "#{ event.creator == Current.user ? "You" : event.creator.name } commented on <span style='color: var(--card-color)'>#{ event.eventable.card.title }</span>".html_safe
+      "#{ event_creator_name(event) } unassigned #{ event.assignees.include?(Current.user) ? "yourself" : event.assignees.pluck(:name).to_sentence } from <span style='color: var(--card-color)'>#{ title }</span>".html_safe
     when "card_published"
-      "#{ event.creator == Current.user ? "You" : event.creator.name } added <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
+      "#{ event_creator_name(event) } added <span style='color: var(--card-color)'>#{ title }</span>".html_safe
     when "card_closed"
-      "#{ event.creator == Current.user ? "You" : event.creator.name } closed <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
+      "#{ event_creator_name(event) } closed <span style='color: var(--card-color)'>#{ title }</span>".html_safe
     when "card_staged"
-      "#{event.creator == Current.user ? "You" : event.creator.name} moved <span style='color: var(--card-color)'>#{ event.eventable.title }</span> to the #{event.stage_name} stage".html_safe
+      "#{event_creator_name(event)} moved <span style='color: var(--card-color)'>#{ title }</span> to the #{event.stage_name} stage".html_safe
     when "card_unstaged"
-      "#{event.creator == Current.user ? "You" : event.creator.name} moved <span style='color: var(--card-color)'>#{ event.eventable.title }</span> out ofthe #{event.stage_name} stage".html_safe
+      "#{event_creator_name(event)} moved <span style='color: var(--card-color)'>#{ title }</span> out ofthe #{event.stage_name} stage".html_safe
     when "card_due_date_added"
-      "#{event.creator == Current.user ? "You" : event.creator.name} set the date to #{event.particulars.dig('particulars', 'due_date').to_date.strftime('%B %-d')} on <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
+      "#{event_creator_name(event)} set the date to #{event.particulars.dig('particulars', 'due_date').to_date.strftime('%B %-d')} on <span style='color: var(--card-color)'>#{ title }</span>".html_safe
     when "card_due_date_changed"
-      "#{event.creator == Current.user ? "You" : event.creator.name} changed the date to #{event.particulars.dig('particulars', 'due_date').to_date.strftime('%B %-d')} on <span style='color: var(--card-color)'>#{ event.eventable.title }</span>".html_safe
+      "#{event_creator_name(event)} changed the date to #{event.particulars.dig('particulars', 'due_date').to_date.strftime('%B %-d')} on <span style='color: var(--card-color)'>#{ title }</span>".html_safe
     when "card_due_date_removed"
-      "#{event.creator == Current.user ? "You" : event.creator.name} removed the date on <span style='color: var(--card-color)'>#{ event.eventable.title }</span>"
+      "#{event_creator_name(event)} removed the date on <span style='color: var(--card-color)'>#{ title }</span>"
     when "card_title_changed"
-      "#{event.creator == Current.user ? "You" : event.creator.name} renamed <span style='color: var(--card-color)'>#{ event.eventable.title }</span> (was: '#{event.particulars.dig('particulars', 'old_title')})'".html_safe
+      "#{event_creator_name(event)} renamed <span style='color: var(--card-color)'>#{ title }</span> (was: '#{event.particulars.dig('particulars', 'old_title')})'".html_safe
     end
   end
 
