@@ -125,11 +125,10 @@ export default class extends Controller {
       this.#handleArrowKey(event, this.#selectPrevious.bind(this))
     },
     Enter(event) {
-      if (event.ctrlKey || event.metaKey) {
-        this.#toggleCurrentItem(event)
-      } else {
-        this.#clickCurrentItem(event)
-      }
+      this.#clickCurrentItem(event)
+    },
+    x(event) {
+      this.#toggleCurrentItem(event)
     }
   }
 }
