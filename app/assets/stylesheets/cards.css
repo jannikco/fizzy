@@ -426,6 +426,18 @@
     }
   }
 
+  .card__collection-public-description {
+    max-inline-size: 66ch;
+
+    p:first-child {
+      margin-block-start: 0;
+    }
+
+    p:last-child {
+      margin-block-end: 0;
+    }
+  }
+      
   .card--search {
     --card-color: var(--color-ink);
     --card-padding-inline: 1rem;

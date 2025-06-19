@@ -13,6 +13,10 @@ module Card::Staged
     stage&.workflow
   end
 
+  def staged?
+    stage.present?
+  end
+
   def change_stage_to(new_stage)
     transaction do
       update! stage: new_stage

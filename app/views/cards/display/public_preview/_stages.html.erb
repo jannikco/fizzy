@@ -1,4 +1,4 @@
-<% if workflow = card.collection.workflow %>
+<% if workflow = card.workflow %>
   <div id="<%= dom_id(card, :stages) %>" class="card__stages">
     <% workflow.stages.each do |stage| %>
       <%= tag.div stage.name,

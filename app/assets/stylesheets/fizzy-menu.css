@@ -6,6 +6,7 @@
               0 0.2em 0.2em oklch(var(--lch-blue-medium) / 5%),
               0 0.4em 0.4em oklch(var(--lch-blue-medium) / 5%),
               0 0.8em 0.8em oklch(var(--lch-blue-medium) / 5%);
+  z-index: 5;
 }
 
 .fizzy-menu {

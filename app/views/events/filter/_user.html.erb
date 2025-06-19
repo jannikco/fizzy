@@ -1,0 +1,7 @@
+<li class="popup__group flex align-center" data-value="<%= user.name.downcase %>" data-filter-target="item" data-navigable-list-target="item">
+  <%= icon_tag "person" %>
+  <%= link_to user, class: "btn popup__item min-width flex-item-grow" do %>
+    <span class="overflow-ellipsis"><%= user.name %></span>
+    <span class="translucent flex-item-no-shrink flex-item-justify-end"> ›</span>
+  <% end %>
+</li>

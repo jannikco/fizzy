@@ -1,6 +1,4 @@
-<% workflow = card.collection.workflow %>
-
-<% if workflow %>
+<% if workflow = card.workflow %>
   <div class="card__stages">
     <% workflow.stages.each do |stage| %>
       <%= tag.span stage.name, class: ["overflow-ellipsis btn justify-start workflow-stage txt-uppercase", { "workflow-stage--current": stage == card.stage }] %>

@@ -7,7 +7,7 @@
         <%= render "cards/display/preview/collection", card: card %>
         <%= render "cards/display/preview/tags", card: card %>
 
-        <% if workflow = card.collection.workflow %>
+        <% if card.staged? %>
           <span class="btn justify-start workflow-stage workflow-stage--current txt-uppercase min-width max-width">
             <span class="overflow-ellipsis "><%= card.stage.name %></span>
           </span>

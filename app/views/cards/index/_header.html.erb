@@ -28,12 +28,28 @@
         <%= text_field_tag :search, nil, placeholder: "Filter…", class: "input input--transparent txt-small", autofocus: true,
               type: "search", autocorrect: "off", autocomplete: "off", data: { "1p-ignore": "true", filter_target: "input", action: "input->filter#filter" } %>
         <%= render "events/filter/header" %>
-        <menu contents>
-          <%= render "cards/index/collections_filter", filter: filter %>
-        </menu>
-        <p class="txt-small txt-align-center margin-block-half full-width">
-          Press <kbd class="kbd"><%= hotkey_label(["ctrl", "J"]) -%></kbd> anytime to open this, <kbd class="kbd">esc</kbd> to close, <kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd> to move, <kbd class="kbd">enter</kbd> to navigate, <kbd class="kbd">SHIFT+ENTER</kbd> to select.
-        </p>
+        <% if Current.user.collections.many? %>
+          <strong class="txt-uppercase txt-x-small margin-block-half pad-inline">Collections</strong>
+          <menu contents>
+            <%= render "cards/index/collections_filter", filter: filter %>
+          </menu>
+        <% end %>
+
+        <strong class="txt-uppercase txt-x-small margin-block-half pad-inline">Tags</strong>
+        <div class="flex flex-column max-width popup__list full-width">
+          <%= render partial: "events/filter/tag", collection: Tag.all.alphabetically, as: :tag %>
+        </div>
+
+        <strong class="txt-uppercase txt-x-small margin-block-half pad-inline">People</strong>
+        <div class="flex flex-column max-width popup__list full-width">
+          <%= render partial: "events/filter/user", collection: User.active.alphabetically, as: :user %>
+        </div>
+
+        <% if platform.desktop? %>
+          <footer class="popup__footer txt-small txt-align-center full-width">
+            Press <kbd class="kbd"><%= hotkey_label(["ctrl", "J"]) -%></kbd> anytime to open this, <kbd class="kbd">esc</kbd> to close, <kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd> to move, <kbd class="kbd">enter</kbd> to navigate, <kbd class="kbd">SHIFT+ENTER</kbd> to select.
+          </footer>
+        <% end %>
       <% end %>
     </div>
   </header>

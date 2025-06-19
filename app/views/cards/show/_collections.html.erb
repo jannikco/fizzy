@@ -1,3 +1,4 @@
+<strong class="txt-uppercase txt-x-small margin-block-half pad-inline">Collections</strong>
 <%= form_with url: cards_path, method: :get, class: "flex flex-column max-width popup__list full-width",
       data: { controller: "form" } do |form| %>
   <% if Current.user.collections.one? %>

@@ -33,7 +33,7 @@ class CollectionsController < ApplicationController
     end
 
     def collection_params
-      params.expect(collection: [ :name, :all_access, :auto_close_period, :auto_reconsider_period ])
+      params.expect(collection: [ :name, :all_access, :auto_close_period, :auto_reconsider_period, :public_description ])
     end
 
     def grantees
