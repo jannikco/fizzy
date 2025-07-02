@@ -6,6 +6,20 @@ class Command::VisitUrl < Command
   end
 
   def execute
-    redirect_to url
+    redirect_to real_url
   end
+
+  private
+    def real_url
+      case url
+      when String
+        if url.start_with?(context.script_name)
+          url
+        else
+          [ context&.script_name, url ].compact.join
+        end
+      else
+        url
+      end
+    end
 end

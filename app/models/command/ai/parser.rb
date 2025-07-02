@@ -7,6 +7,7 @@ class Command::Ai::Parser
 
   def initialize(context)
     @context = context
+    self.default_url_options[:script_name] = context.script_name
   end
 
   def parse(query)
@@ -59,7 +60,7 @@ class Command::Ai::Parser
     def context_from_query(query_json)
       if context_properties = query_json[:context].presence
         url = cards_path(**context_properties)
-        Command::Parser::Context.new(user, url: url)
+        Command::Parser::Context.new(user, url: url, script_name: context.script_name)
       end
     end
 end

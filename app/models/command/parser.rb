@@ -1,7 +1,7 @@
 class Command::Parser
   attr_reader :context
 
-  delegate :user, :cards, :filter, to: :context
+  delegate :user, :cards, :filter, :script_name, to: :context
 
   def initialize(context)
     @context = context
@@ -12,6 +12,7 @@ class Command::Parser
       command.user = user
       command.line ||= string
       command.context ||= context
+      command.default_url_options[:script_name] = script_name
     end
   end
 

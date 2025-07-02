@@ -2,8 +2,9 @@ module ApplicationCable
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
 
-    tenanted_connection do
-      set_current_user || reject_unauthorized_connection
+    def connect
+      super
+      ApplicationRecord.with_tenant(current_tenant) { set_current_user || reject_unauthorized_connection }
     end
 
     private

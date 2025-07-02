@@ -1,14 +1,14 @@
 require "test_helper"
 
 class Signup::AccountsControllerTest < ActionDispatch::IntegrationTest
-  test "new under a tenanted domain redirects to the root" do
+  test "new under a tenanted URL redirects to the root" do
     get new_signup_account_url
 
     assert_redirected_to root_url
   end
 
-  test "new under an untenanted domain is OK" do
-    integration_session.host = "example.com" # no subdomain
+  test "new under an untenanted URL is OK" do
+    integration_session.default_url_options[:script_name] = "" # no tenant
 
     get new_signup_account_url, headers: auth_headers
 
@@ -16,7 +16,7 @@ class Signup::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create with invalid params" do
-    integration_session.host = "example.com" # no subdomain
+    integration_session.default_url_options[:script_name] = "" # no tenant
 
     post signup_accounts_url,
          headers: auth_headers,
@@ -27,7 +27,7 @@ class Signup::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create for a new " do
-    integration_session.host = "example.com" # no subdomain
+    integration_session.default_url_options[:script_name] = "" # no tenant
 
     assert_difference -> { SignalId::Identity.count }, +1 do
       assert_difference -> { SignalId::Account.count }, +1 do
@@ -48,7 +48,7 @@ class Signup::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create for an existing identity" do
-    integration_session.host = "example.com" # no subdomain
+    integration_session.default_url_options[:script_name] = "" # no tenant
 
     identity = signal_identities(:david)
 
@@ -72,7 +72,7 @@ class Signup::AccountsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "actions require HTTP basic authentication while we're in internal-only mode" do
-    integration_session.host = "example.com" # no subdomain
+    integration_session.default_url_options[:script_name] = "" # no tenant
 
     get new_signup_account_url
 

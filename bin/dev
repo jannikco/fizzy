@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 
-echo "Access with david@37signals.com / secret123456 on http://37signals.fizzy.localhost:3006"
-echo "Access with david@37signals.com / secret123456 on http://honcho.fizzy.localhost:3006"
+echo "Login with david@37signals.com / secret123456 to:"
+echo "  - 37signals: http://fizzy.localhost:3006/735464785"
+echo "  - Honcho:    http://fizzy.localhost:3006/175932900"
 
 if [ -f tmp/solid-queue.txt ]; then
   export SOLID_QUEUE_IN_PUMA=1

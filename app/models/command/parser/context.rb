@@ -1,9 +1,10 @@
 class Command::Parser::Context
-  attr_reader :user, :url
+  attr_reader :user, :url, :script_name
 
-  def initialize(user, url:)
+  def initialize(user, url:, script_name: "")
     @user = user
     @url = url
+    @script_name = script_name
 
     extract_url_components
   end
@@ -52,7 +53,8 @@ class Command::Parser::Context
 
     def extract_url_components
       uri = URI.parse(url || "")
-      route = Rails.application.routes.recognize_path(uri.path)
+      path = uri.path.delete_prefix(script_name)
+      route = Rails.application.routes.recognize_path(path)
       @controller = route[:controller]
       @action = route[:action]
       @params =  ActionController::Parameters.new(Rack::Utils.parse_nested_query(uri.query).merge(route.except(:controller, :action)))

@@ -4,7 +4,7 @@ module CommandTestHelper
   end
 
   def parse_command(string, context_url: nil, user: users(:david))
-    context = Command::Parser::Context.new(user, url: context_url)
+    context = Command::Parser::Context.new(user, url: context_url, script_name: integration_session.default_url_options[:script_name])
     parser = Command::Parser.new(context)
     parser.parse(string).tap do |command|
       command.user = user if command

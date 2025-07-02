@@ -108,10 +108,10 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
   end
 
   test "visit screens" do
-    assert_command({ commands: [ "/visit #{user_path(@user)}" ] }, "my profile")
-    assert_command({ commands: [ "/visit #{edit_user_path(@user)}" ] }, "edit my profile")
-    assert_command({ commands: [ "/visit #{account_settings_path}" ] }, "manage users")
-    assert_command({ commands: [ "/visit #{account_settings_path}" ] }, "account settings")
+    assert_command({ commands: [ "/visit #{user_path(@user, script_name: nil)}" ] }, "my profile")
+    assert_command({ commands: [ "/visit #{edit_user_path(@user, script_name: nil)}" ] }, "edit my profile")
+    assert_command({ commands: [ "/visit #{account_settings_path(script_name: nil)}" ] }, "manage users")
+    assert_command({ commands: [ "/visit #{account_settings_path(script_name: nil)}" ] }, "account settings")
   end
 
   test "create cards" do
@@ -146,7 +146,7 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
     def translate(query, user: @user, context: :list)
       raise "Context must be :card or _list" unless context.in?(%i[ card list ])
       url = context == :card ? card_url(cards(:logo)) : cards_url
-      context = Command::Parser::Context.new(user, url: url)
+      context = Command::Parser::Context.new(user, url: url, script_name: integration_session.default_url_options[:script_name])
       translator = Command::Ai::Translator.new(context)
       translator.translate(query)
     end

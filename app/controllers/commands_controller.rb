@@ -29,7 +29,7 @@ class CommandsController < ApplicationController
     end
 
     def parsing_context
-      @parsing_context ||= Command::Parser::Context.new(Current.user, url: request.referrer)
+      @parsing_context ||= Command::Parser::Context.new(Current.user, url: request.referrer, script_name: request.script_name)
     end
 
     def confirmed?(command)
