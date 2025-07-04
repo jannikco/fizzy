@@ -6,6 +6,8 @@ class Access < ApplicationRecord
 
   scope :ordered_by_recently_accessed, -> { order(accessed_at: :desc) }
 
+  after_destroy_commit :clean_inaccessible_notifications_later
+
   def accessed
     touch :accessed_at unless recently_accessed?
   end
@@ -13,5 +15,9 @@ class Access < ApplicationRecord
   private
     def recently_accessed?
       accessed_at&.> 5.minutes.ago
+    end
+
+    def clean_inaccessible_notifications_later
+      Collection::CleanInaccessibleNotificationsJob.perform_later(user, collection)
     end
 end

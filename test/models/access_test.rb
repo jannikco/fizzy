@@ -14,4 +14,28 @@ class AccessTest < ActiveSupport::TestCase
       accesses(:writebook_kevin).accessed
     end
   end
+
+  test "notifications are destroyed when access is lost" do
+    kevin = users(:kevin)
+    collection = collections(:writebook)
+
+    assert kevin.notifications.count > 0
+
+    notifications_to_be_destroyed = kevin.notifications.select do |notification|
+      notification.card&.collection == collection
+    end
+    assert notifications_to_be_destroyed.any?
+
+    kevin_access = accesses(:writebook_kevin)
+
+    perform_enqueued_jobs only: Collection::CleanInaccessibleNotificationsJob do
+      kevin_access.destroy
+    end
+
+    remaining_notifications = kevin.notifications.reload.select do |notification|
+      notification.card&.collection == collection
+    end
+
+    assert_empty remaining_notifications
+  end
 end

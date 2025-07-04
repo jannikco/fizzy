@@ -36,6 +36,14 @@ module Collection::Accessible
     accesses.find_by(user: user)
   end
 
+  def clean_inaccessible_notifications_for(user)
+    user.notifications.find_each do |notification|
+      if notification.card&.collection == self
+        notification.destroy
+      end
+    end
+  end
+
   private
     def grant_access_to_everyone
       accesses.grant_to(User.all) if all_access_previously_changed?(to: true)
