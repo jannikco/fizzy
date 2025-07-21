@@ -34,7 +34,7 @@ def find_or_create_user(full_name, email_address)
       )
     end
 
-    signal_account = Account.first.signal_account
+    signal_account = Account.sole.signal_account
     signal_user = SignalId::User.find_or_create_by!(identity: signal_identity, account: signal_account)
 
     if user = User.find_by(signal_user_id: signal_user.id)

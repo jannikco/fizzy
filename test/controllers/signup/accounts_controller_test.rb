@@ -66,7 +66,7 @@ class Signup::AccountsControllerTest < ActionDispatch::IntegrationTest
     end
 
     signal_account = SignalId::Account.last
-    ApplicationRecord.with_tenant(signal_account.subdomain) do
+    ApplicationRecord.with_tenant(signal_account.queenbee_id) do
       assert_equal Account.last, signal_account.peer
     end
   end

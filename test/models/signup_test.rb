@@ -44,7 +44,8 @@ class SignupTest < ActiveSupport::TestCase
     assert @signup.user.persisted?
     assert_equal @signup.user.signal_user, @signup.signal_account.owner
 
-    assert_includes ApplicationRecord.tenants, @signup.signal_account.subdomain
+    assert_equal @signup.queenbee_account.id.to_s, @signup.tenant_name
+    assert_includes ApplicationRecord.tenants, @signup.tenant_name
   end
 
   test "the new account is named with company name if present" do
@@ -87,7 +88,8 @@ class SignupTest < ActiveSupport::TestCase
     assert @signup.user.persisted?
     assert_equal @signup.user.signal_user, @signup.signal_account.owner
 
-    assert_includes ApplicationRecord.tenants, @signup.signal_account.subdomain
+    assert_equal @signup.queenbee_account.id.to_s, @signup.tenant_name
+    assert_includes ApplicationRecord.tenants, @signup.tenant_name
   end
 
   test "#process does nothing if a validation error occurs creating identity" do

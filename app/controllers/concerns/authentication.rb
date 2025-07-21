@@ -5,7 +5,6 @@ module Authentication
     # Checking for tenant must happen first so we redirect before trying to access the db.
     before_action :require_tenant
 
-    before_action :set_current_account
     before_action :require_authentication
     helper_method :authenticated?
   end
@@ -23,7 +22,6 @@ module Authentication
 
     def require_untenanted_access(**options)
       skip_before_action :require_tenant, **options
-      skip_before_action :set_current_account, **options
       skip_before_action :require_authentication, **options
       before_action :redirect_tenanted_request, **options
     end
@@ -52,11 +50,14 @@ module Authentication
       Session.find_signed(cookies.signed[:session_token])
     end
 
-
-    def request_authentication
-      session[:return_to_after_authenticating] = request.url
-
-      redirect_to Launchpad.login_url(product: true, account: Current.account), allow_other_host: true
+    def request_authentication(untenanted: false)
+      if ApplicationRecord.current_tenant.present?
+        session[:return_to_after_authenticating] = request.url
+        redirect_to Launchpad.login_url(product: true, account: Account.sole), allow_other_host: true
+      else
+        # Don't save the current untenanted URL, because it's just going to bounce back to Launchpad after login anyway.
+        redirect_to Launchpad.login_url(product: true), allow_other_host: true
+      end
     end
 
     def after_authentication_url
@@ -81,10 +82,6 @@ module Authentication
       logger.struct "  Authorized User##{session.user.id}", authentication: { user: { id: session.user.id } }
       Current.session = session
       cookies.signed.permanent[:session_token] = { value: session.signed_id, httponly: true, same_site: :lax }
-    end
-
-    def set_current_account
-      Current.account = Account.first
     end
 
     def terminate_session

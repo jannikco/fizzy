@@ -34,7 +34,9 @@ class Command::Ai::Parser
     end
 
     def commands_from_query(normalized_query, context)
-      parser = Command::Parser.new(context)
+      # The query should only contain supported /commands. If that's not the case,
+      # we don't want to fall back to AI again (potential stack overflow).
+      parser = Command::Parser.new(context, fall_back_to_ai: false)
       if command_lines = normalized_query[:commands].presence
         command_lines.collect { parser.parse(it) }
       end
@@ -47,6 +49,7 @@ class Command::Ai::Parser
           query_context[:creator_ids] = query_context[:creator_ids]&.filter_map { |name| context.find_user(name)&.id }
           query_context[:closer_ids] = query_context[:closer_ids]&.filter_map { |name| context.find_user(name)&.id }
           query_context[:collection_ids] = query_context[:collection_ids]&.filter_map { |name| context.find_collection(name)&.id }
+          query_context[:stage_ids] = query_context[:stage_ids]&.filter_map { |name| context.find_workflow_stage(name)&.id }
           query_context[:tag_ids] = query_context[:tag_ids]&.filter_map { |name| context.find_tag(name)&.id }
           query_context.compact!
         end

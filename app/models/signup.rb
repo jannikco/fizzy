@@ -55,7 +55,7 @@ class Signup
   end
 
   def tenant_name
-    @tenant_name ||= signal_account.subdomain
+    @tenant_name ||= @queenbee_account.id.to_s
   end
 
   def to_h

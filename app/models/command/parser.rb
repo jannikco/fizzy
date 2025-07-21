@@ -3,8 +3,9 @@ class Command::Parser
 
   delegate :user, :cards, :filter, :script_name, to: :context
 
-  def initialize(context)
+  def initialize(context, fall_back_to_ai: true)
     @context = context
+    @fall_back_to_ai = fall_back_to_ai
   end
 
   def parse(string)
@@ -17,6 +18,10 @@ class Command::Parser
   end
 
   private
+    def fall_back_to_ai?
+      @fall_back_to_ai
+    end
+
     def as_plain_text(string)
       ActionText::Content.new(string).to_plain_text
     end
@@ -56,6 +61,8 @@ class Command::Parser
         Command::AddCard.new(card_title: combined_arguments, collection_id: guess_collection&.id)
       when "/search"
         Command::Search.new(terms: combined_arguments)
+      when "/user"
+        Command::GoToUser.new(user_id: context.find_user(combined_arguments)&.id)
       when "/stage"
         Command::Stage.new(stage_id: context.find_workflow_stage(combined_arguments)&.id, card_ids: cards.ids)
       when "/visit"
@@ -98,7 +105,7 @@ class Command::Parser
       elsif card = single_card_from(string)
         Command::GoToCard.new(card_id: card.id)
       else
-        Command::Ai::Parser.new(context).parse(string)
+        parse_with_fallback(string)
       end
     end
 
@@ -111,5 +118,13 @@ class Command::Parser
 
     def single_card_from(string)
       user.accessible_cards.find_by_id(string)
+    end
+
+    def parse_with_fallback(string)
+      if fall_back_to_ai?
+        Command::Ai::Parser.new(context).parse(string)
+      else
+        Command::Search.new(terms: string)
+      end
     end
 end

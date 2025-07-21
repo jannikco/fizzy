@@ -16,6 +16,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+*.log
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
@@ -28,6 +29,7 @@
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+/data
 
 /public/assets
 

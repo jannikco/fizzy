@@ -25,4 +25,15 @@ class Command::Ai::ParserTest < ActionDispatch::IntegrationTest
     assert_equal [ collections(:writebook).id.to_s ], params[:collection_ids]
     assert_equal [ tags(:web).id.to_s ], params[:tag_ids]
   end
+
+  test "if the AI translator emitted an unknown command, this will result in a regular search (not on AI recursion)" do
+    Command::Ai::Translator.any_instance.stubs(:translate).returns(commands: [ "/missing" ])
+
+    command = parse_command "assign @kevin and close"
+    assert command.commands.one?
+
+    search_command = command.commands.first
+    assert search_command.is_a?(Command::Search)
+    assert_equal "/missing", search_command.terms
+  end
 end

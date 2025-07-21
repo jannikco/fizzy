@@ -3,7 +3,7 @@ require_relative "../../config/environment"
 CARDS_COUNT = 200
 
 ApplicationRecord.current_tenant = "37signals"
-account = Account.first
+account = Account.sole
 user = User.first
 Current.session = user.sessions.last
 collection = Collection.first
