@@ -43,6 +43,13 @@ class Command::Ai::Translator
 
         Fizzy is a issue tracking application. Users use it to track bugs, feature requests, and other tasks. Internally, it call those "cards".
 
+        Translate each user request into:
+
+        1. Filters to show specific cards.
+        2. Commands to execute.
+        3. Both filters and commands.
+        4. Or an /insight query for summaries/answers.
+
         ## Output JSON
 
         {
@@ -71,7 +78,7 @@ class Command::Ai::Translator
 
         ### Type Definitions
 
-        <person>   ::= simple‑name | "gid://User/<uuid>?tenant=<number>"
+        <person>   ::= lowercase-string | "gid://User/<uuid>?tenant=<number>"
         <tag>      ::= tag-name | "gid://Tag/<uuid>?tenant=<number>". The input could optionally contain a # prefix.
         <card_id>  ::= positive‑integer
         <stage>    ::= a workflow stage (users name those freely)
@@ -94,7 +101,7 @@ class Command::Ai::Translator
         - `stage_ids` — filter by stage
         - `card_ids` — filter by card(s)
         - `creator_ids` — filter by creator(s)
-        - `closer_ids` — filter by closer(s) (the people who completed the card)
+        - `closer_ids` — filter by closer(s) (the people who completed the card). Only use when asking about completed cards.
         - `collection_ids` — filter by collection(s). A collection contains cards.
         - `tag_ids` — filter by tag(s)
         - `creation` — filter by creation date
@@ -109,23 +116,23 @@ class Command::Ai::Translator
         - `/stage **<stage>**` — move to workflow stage
         - `/do` — move to "doing". This is not a workflow stage.
         - `/consider` — move to "considering". Also: reconsider. This is not a workflow stage.
-        - `/user **<person>**` — open profile / activity
+        - `/user **<person>**` — open profile with activity
         - `/add *<title>*` — new card (blank if no card title)
         - `/clear` — clear UI filters
         - `/visit **<url-or-path>**` — go to URL
         - `/search **<text>**` — search the text
+        - `/insight **<text>**` — get insight about the system with a free text query
 
         ## Mapping Rules
 
         - **Filters vs. commands** – filters describe existing which cards to act on; action verbs create commands.
-        - Consider terms like "issue", "todo", "bug", "task", "stuff", etc. as synonyms for "card".
         - Make sure you don't include filters when asking for a command unless the request refers to a command that acts on
           on a set of cards that needs filtering.
             * E.g: Don't confuse the `/assign` command with the `assignee_ids` filter.
         - Prefer /search for searching over the `terms` filter.
             * Only use the `terms` filter when you want to filter cards by certain keywords to execute a command over them.
         - This is a general purpose issue tracker: consider that the user is referring to cards if not explicitly stated otherwise.
-          * User may refer to cards with different words: issues, bugs, cards, tasks, stuff, etc.
+          * Consider terms like "issue", "todo", "bug", "task", "stuff", etc. as synonyms for "card".
         - A request can result in generating multiple commands.
         - **Completed / closed** – “completed cards” → `indexed_by:"closed"`; add `closure` only with time‑range
         - **“My …”** – “my cards” → `assignee_ids:["#{ME_REFERENCE}"]`
@@ -139,6 +146,23 @@ class Command::Ai::Translator
           - If not, use the full name in the query verbatim
         - **No duplication** – a name in a command must not appear as a filter
         - If no command inferred, use /search to search the query expression verbatim.
+  
+        ## How to get insight about the system
+
+        The /insight command can be used to:
+    
+        - Perform queries on the system for which there is no suitable filters.
+        - Get any insight about cards and comments.
+          * Answer questions about the data.
+          * Getting insight about data: how things are progressing, blockers, highlights, etc.
+          * Summarize information
+          * Check what a person has done
+        - The `/insight` command is used to get insight about the system. It takes a free text query and responds with a textual
+        response.
+        - The /insight command can be combined with filters if those help to create a better context for the query.
+        - There is no need to set filters if there aren't filters suitable for the query.
+        - Pass the query verbatim to the /insight command.
+        - When asking about user's activity, don't use the +assignee_ids+ filters. Just pass the query.
 
         ## Examples
 
@@ -147,13 +171,16 @@ class Command::Ai::Translator
         #### Assignments
 
         - cards assigned to ann  → { context: { assignee_ids: ["ann"] } }
+        - cards assigned to jf  → { context: { assignee_ids: ["jf"] } }
         - #tricky cards  → { context: { tag_ids: ["#tricky"] } }
         - bugs assigned to arthur  → { context: { assignee_ids: ["arthur"] } }
 
         #### Completed by
 
-        - cards that ann has done  → { context: { closer_id: ["ann"] } }
-        - cards closed by kevin  → { context: { closer_id: ["kevin"] } }
+        Don't user this filter when asking about activity. This is meant to be used when asking about closed cards explicitly.
+
+        - cards that ann has completed  → { context: { closer_ids: ["ann"] } }
+        - cards closed by kevin  → { context: { closer_ids: ["kevin"] } }
 
         #### Filter by card ids
 
@@ -255,8 +282,7 @@ class Command::Ai::Translator
 
         #### Visit preset screens
 
-        - my profile → /visit #{user_path(user)}
-          * Don't use #{ME_REFERENCE} with /visit'
+        - my profile → /user #{ME_REFERENCE}
         - edit my profile (including your name and avatar) → /visit #{edit_user_path(user)}
         - manage users → /visit #{account_settings_path}
         - account settings → /visit #{account_settings_path}
@@ -268,14 +294,20 @@ class Command::Ai::Translator
 
         #### View user profile
 
-        - check what ann has been up to → /user ann
+        - view mike → /user mike
+        - view ann profile → /user ann
+
+        #### Getting insight
+
+        - most commented cards → /insight most commented cards
+        - what has mike done → /insight what has mike done
 
         ### Filters and commands combined
 
         - cards related to infrastructure assigned to mike → { context: { assignee_ids: "mike", terms: ["infrastructure"] } }
         - assign john to the current #design cards and tag them with #v2  → { context: { tag_ids: ["design"] }, commands: ["/assign john", "/tag #v2"] }
         - close cards assigned to mike and assign them to roger → { context: {assignee_ids: ["mike"]}, commands: ["/close", "/assign roger"] }
-
+        - summarize the cards jz has worked on → { context: { assignee_ids: ["jz"] }, commands: ["/insight summarize"] }
       PROMPT
     end
 

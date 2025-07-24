@@ -7,8 +7,6 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
     @user = users(:david)
   end
 
-  vcr_record!
-
   test "filter by assignments" do
     # List context
     assert_command({ context: { assignee_ids: [ "jz" ] } }, "cards assigned to jz")
@@ -19,7 +17,6 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
     assert_command({ context: { assignment_status: "unassigned" } }, "unassigned cards")
     assert_command({ context: { assignment_status: "unassigned" } }, "not assigned")
     assert_command({ context: { assignee_ids: [ "jorge" ], terms: [ "performance" ] } }, "cards about performance assigned to jorge")
-    assert_command({ context: { closer_ids: [ "jz" ], indexed_by: "latest" } }, "stuff that jz has done lately")
 
     # Card context
     assert_command({ context: { assignee_ids: [ "jz" ] } }, "cards assigned to jz", context: :card)
@@ -136,7 +133,7 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
   end
 
   test "visit screens" do
-    assert_command({ commands: [ "/visit #{user_path(@user, script_name: nil)}" ] }, "my profile")
+    assert_command({ commands: [ "/user #{@user.to_gid}" ] }, "my profile")
     assert_command({ commands: [ "/visit #{edit_user_path(@user, script_name: nil)}" ] }, "edit my profile")
     assert_command({ commands: [ "/visit #{account_settings_path(script_name: nil)}" ] }, "manage users")
     assert_command({ commands: [ "/visit #{account_settings_path(script_name: nil)}" ] }, "account settings")
@@ -145,9 +142,8 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
   end
 
   test "view users profiles" do
-    assert_command({ commands: [ "/user jz" ] }, "check what jz has been up to")
     assert_command({ commands: [ "/user kevin" ] }, "view kevin")
-    assert_command({ commands: [ "/user john" ] }, "view john")
+    assert_command({ commands: [ "/user john" ] }, "view john profile")
   end
 
   test "create cards" do
@@ -164,6 +160,16 @@ class Command::Ai::TranslatorTest < ActionDispatch::IntegrationTest
 
   test "default to search" do
     assert_command({ commands: [ "/search backups" ] }, "backups")
+  end
+
+  vcr_record!
+
+  test "get insight" do
+    assert_command({ commands: [ "/insight cards where mike has commented on" ] }, "cards where mike has commented on")
+    assert_command({ context: { assignee_ids: ["jz"] }, commands: [ "/insight cards where mike has commented" ] }, "cards where mike has commented assigned to jz")
+    assert_command({ commands: [ "/insight summarize this" ] }, "summarize this")
+    assert_command({ commands: [ "/insight are there blockers here?" ] }, "are there blockers here?")
+    assert_command({ commands: [ "/insight stuff that jz has done lately" ] }, "stuff that jz has done lately")
   end
 
   test "combine commands and filters" do

@@ -22,7 +22,7 @@ class Command::GetInsight < Command
 
   private
     def chat
-      chat = RubyLLM.chat
+      chat = RubyLLM.chat(model: "chatgpt-4o-latest")
       chat.with_instructions(prompt + cards_context)
     end
 
