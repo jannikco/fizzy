@@ -42,7 +42,9 @@
   <% end %>
 </header>
 
-<div data-controller="beacon lightbox" data-beacon-url-value="<%= card_reading_url(@card) %>">
+<div data-controller="beacon lightbox"
+     data-action="visibilitychange@document->beacon#visibilityChanged"
+     data-beacon-url-value="<%= card_reading_url(@card) %>">
   <%= render "cards/container", card: @card %>
 
   <% if @card.published? || @card.drafted? %>

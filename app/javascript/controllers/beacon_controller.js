@@ -4,11 +4,17 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static values = { url: String }
 
-  connect() {
-    post(this.urlValue, { responseKind: "turbo-stream" })
+  visibilityChanged() {
+    this.#sendBeacon()
   }
 
   disconnect() {
-    post(this.urlValue, { responseKind: "turbo-stream" })
+    this.#sendBeacon()
+  }
+
+  #sendBeacon() {
+    if (!document.hidden) {
+      post(this.urlValue, { responseKind: "turbo-stream" })
+    }
   }
 }
