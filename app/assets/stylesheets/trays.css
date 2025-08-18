@@ -56,6 +56,18 @@
     &:not([open]) {
       block-size: var(--footer-height);
       pointer-events: none;
+
+      /* On desktop, when there aren't items, tweak the position so the hat
+         doesn't look like it's coming from the bottom of the viewport */
+      @media (min-width: 800px) {
+        &:has(.tray__hat:last-child) {
+          inset-block-end: calc(var(--footer-height) / 2);
+
+          .tray__hat {
+            margin-block-end: 0;
+          }
+        }
+      }
     }
   }
 
@@ -151,8 +163,8 @@
       transition: var(--tray-duration) var(--tray-timing-function);
       transition-delay: var(--tray-item-delay);
       transition-property: margin, scale;
-      
-      
+
+
       &:not(.tray__hat) {
         z-index: var(--tray-item-z);
       }
@@ -328,7 +340,7 @@
       [open] &[aria-selected] {
         outline: 0;
         z-index: calc(var(--tray-item-z) + 2);
-  
+
         .card__link {
           border-radius: 0.25ch;
           outline: var(--focus-ring-size) solid var(--focus-ring-color);
@@ -463,7 +475,7 @@
       [open] &[aria-selected] {
         outline: 0;
         z-index: calc(var(--tray-item-z) + 2);
-        
+
         .card,
         .tray__hat & .btn {
           border-radius: 0.25ch;
