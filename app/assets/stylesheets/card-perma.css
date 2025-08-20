@@ -55,7 +55,9 @@
 
     .card__meta,
     .card__stages {
-      font-size: var(--text-x-small);
+      @media (min-width: 639px) {
+        font-size: var(--text-small);
+      }
     }
 
     .card__stages {
