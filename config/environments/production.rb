@@ -73,13 +73,6 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  config.hosts = [
-    "fizzy.37signals.com",
-    "localhost",
-    IPAddr.new("172.17.0.0/20") # Docker VPC
-  ]
-
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: config.hosts.first, protocol: "https" }
 
