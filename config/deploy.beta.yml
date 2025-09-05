@@ -2,13 +2,10 @@ servers:
   web:
     hosts:
       - fizzy-beta-app-01
+      - fizzy-beta-app-101
   jobs:
     hosts:
       - fizzy-beta-app-01
-  web-replica:
-    hosts:
-      - fizzy-beta-app-101
-    proxy: true
 
 proxy:
   ssl: false
@@ -20,34 +17,23 @@ env:
   clear:
     RAILS_ENV: beta
 
-x-beamer-accessory: &beamer-accessory
-  image: basecamp/beamer:vfs
-  registry:
-    server: registry.37signals.com
-    username: robot$harbor-bot
-    password: 
-      - BASECAMP_REGISTRY_PASSWORD
-  options:
-    user: 1000 # Match the UID of the Rails app, for volume permissions
-  volumes:
-    - fizzy:/storage
-
-
 accessories:
-  beamer-primary:
-    <<: *beamer-accessory
-    service: beamer-primary
-    cmd: beamer primary --remove-after=1h --dir=/storage --disable-tls
-    port: 5000:80
-    roles:
-      - web
-
-  beamer-replica:
-    <<: *beamer-accessory
-    service: beamer-replica
-    cmd: beamer replica --primary=http://fizzy-beta-app-01:5000/ --dir=/storage
-    roles:
-      - web-replica
+  beamer:
+    image: basecamp/beamer:vfs
+    registry:
+      server: registry.37signals.com
+      username: robot$harbor-bot
+      password:
+        - BASECAMP_REGISTRY_PASSWORD
+    options:
+      user: 1000 # Match the UID of the Rails app, for volume permissions
+    volumes:
+      - fizzy:/home/beamer
+    cmd: beamer run --retention=1h
+    port: 5001:5001
+    hosts:
+      - fizzy-beta-app-01
+      - fizzy-beta-app-101
 
   load-balancer:
     image: basecamp/kamal-proxy:lb
