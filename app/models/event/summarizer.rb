@@ -4,7 +4,7 @@ class Event::Summarizer
 
   attr_reader :events
 
-  LLM_MODEL = "chatgpt-4o-latest"
+  LLM_MODEL = "gpt-5-chat-latest"
 
   PROMPT = <<~PROMPT
     Help me make sense of the week’s activity in a news style format with bold headlines and short summaries.
