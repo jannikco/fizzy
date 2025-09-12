@@ -17,7 +17,7 @@ class CardsController < ApplicationController
     @closed = page_and_filter_for_closed_cards
 
     @cache_key = [ @considering, @on_deck, @doing, @closed ].collect { it.page.records }.including([ Workflow.all ])
-    fresh_when etag: @cache_key
+    fresh_when etag: [ @cache_key, @user_filtering ]
   end
 
   def create
