@@ -8,7 +8,8 @@ export default class extends Controller {
   static values = {
     selectPropertyName: { type: String, default: "aria-checked" },
     defaultValue: String,
-    noSelectionLabel: { type: String, default: "No selection" }
+    noSelectionLabel: { type: String, default: "No selection" },
+    labelPrefix: String
   }
 
   connect() {
@@ -22,6 +23,13 @@ export default class extends Controller {
     }
   }
 
+
+  clear(event) {
+    this.#deselectAll()
+    this.#updateHiddenFields()
+    this.labelTarget.textContent = this.#selectedLabel
+  }
+
   get #selectedLabel() {
     const selectedValues = this.#selectedValues()
     if (selectedValues.length === 0) {
@@ -29,10 +37,12 @@ export default class extends Controller {
     }
 
     const labels = this.#selectedItems().map(item => item.dataset.multiSelectionComboboxLabel)
-    return toSentence(labels, {
+    const sentence = toSentence(labels, {
       two_words_connector: " or ",
       last_word_connector: ", or "
     })
+
+    return this.hasLabelPrefixValue ? `${this.labelPrefixValue} ${sentence}` : sentence
   }
 
   #toggleSelection(item) {
@@ -51,6 +61,12 @@ export default class extends Controller {
   #updateHiddenFields() {
     this.#clearHiddenFields()
     this.#addHiddenFields()
+  }
+
+  #deselectAll() {
+    this.itemTargets.forEach(item => {
+      item.setAttribute(this.selectPropertyNameValue, "false")
+    })
   }
 
   #selectedItems() {
