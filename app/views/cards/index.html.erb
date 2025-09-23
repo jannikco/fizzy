@@ -18,7 +18,9 @@
     <% end %>
   </div>
 
-  <%= render "filters/settings", user_filtering: @user_filtering %>
+  <h1 class="header__title overflow-ellipsis">
+    <%= @user_filtering.selected_collections_label %>
+  </h1>
 
   <div class="header__actions header__actions--end">
     <% if collection = @filter.single_collection %>
@@ -26,6 +28,8 @@
     <% end %>
   </div>
 <% end %>
+
+<%= render "filters/settings", user_filtering: @user_filtering %>
 
 <%= tag.div data: {
       controller: "drag-and-drop",

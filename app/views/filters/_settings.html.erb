@@ -3,6 +3,9 @@
         class: class_names("filters flex align-center gap-half justify-center center margin-block-end", { "filters--expanded": user_filtering.expanded? }),
         data: { controller: "toggle-class", toggle_class_toggle_class: "filters--expanded" } do %>
     <div class="flex-inline center align-center gap-half" data-controller="toggle-enable">
+      <div class="btn btn-circle txt-x-small" style="visibility: hidden">
+        <!-- placeholder for centering -->
+      </div>
       <%= render "filters/settings/terms", user_filtering: user_filtering %>
       <%= render "filters/settings/controls", user_filtering: user_filtering %>
 

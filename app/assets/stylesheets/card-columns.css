@@ -492,6 +492,7 @@
     --column-color: var(--color-ink-lighter);
 
     margin-block: var(--cards-gap);
+    margin-inline-start: auto;
 
     .card {
       --card-color: var(--color-card-complete) !important;
