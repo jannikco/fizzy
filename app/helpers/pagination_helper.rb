@@ -40,7 +40,6 @@ module PaginationHelper
       classes = properties.delete(:class)
       tag.public_send tag_element,
         class: token_list(name, "display-contents", classes),
-        role: "list",
         data: { controller: "pagination", pagination_paginate_on_intersection_value: paginate_on_scroll },
         &block
     end
