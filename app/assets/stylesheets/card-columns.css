@@ -111,6 +111,10 @@
     .card {
       inline-size: calc(var(--column-width-expanded) - var(--column-padding-expanded) * 2);
     }
+
+    .cards--grid & {
+      display: contents;
+    }
   }
 
   .cards__new-column {
