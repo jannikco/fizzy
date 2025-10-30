@@ -50,8 +50,4 @@ module CardsHelper
   def card_preview_cache_parts(card)
     [ card, card.collection.entropy_configuration, card.collection.publication, card.collection.name, card.column ]
   end
-
-  def card_perma_cache_parts(card)
-    [ card, card.collection.columns, card.collection.name ]
-  end
 end

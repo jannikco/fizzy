@@ -14,7 +14,7 @@ class CardsController < ApplicationController
   end
 
   def show
-    fresh_when etag: [ @card, @card.collection.columns, @card.collection.name ]
+    fresh_when @card
   end
 
   def edit
