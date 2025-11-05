@@ -7,13 +7,13 @@ class LandingsControllerTest < ActionDispatch::IntegrationTest
 
   test "redirects to the timeline when many boards" do
     get landing_path
-    assert_redirected_to events_path
+    assert_redirected_to root_path
   end
 
   test "redirects to the timeline when no boards" do
     Board.destroy_all
     get landing_path
-    assert_redirected_to events_path
+    assert_redirected_to root_path
   end
 
   test "redirects to boards when only one board" do

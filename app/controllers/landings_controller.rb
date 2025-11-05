@@ -3,7 +3,7 @@ class LandingsController < ApplicationController
     if Current.user.boards.one?
       redirect_to board_path(Current.user.boards.first)
     else
-      redirect_to events_path
+      redirect_to root_path
     end
   end
 end
