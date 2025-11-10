@@ -6,3 +6,6 @@ jz:
 
 kevin:
   email_address: kevin@37signals.com
+
+mike:
+  email_address: mike@37signals.com

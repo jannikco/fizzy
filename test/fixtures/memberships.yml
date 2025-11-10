@@ -10,3 +10,7 @@ jz_in_37signals:
 kevin_in_37signals:
   identity: kevin
   tenant: <%= ActiveRecord::FixtureSet.identify("37signals") %> # matches the external_account_id
+
+mike_in_initech:
+  identity: mike
+  tenant: <%= ActiveRecord::FixtureSet.identify("initech") %>

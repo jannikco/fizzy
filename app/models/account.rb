@@ -2,6 +2,7 @@ class Account < ApplicationRecord
   include Entropic, Seedeable
 
   has_one :join_code
+  has_many :users, dependent: :destroy
 
   has_many_attached :uploads
 

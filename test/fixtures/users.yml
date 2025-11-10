@@ -20,3 +20,9 @@ system:
   name: System
   role: system
   account: 37s
+
+mike:
+  name: Mike
+  role: admin
+  membership: mike_in_initech
+  account: initech

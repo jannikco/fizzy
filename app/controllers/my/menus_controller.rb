@@ -3,7 +3,7 @@ class My::MenusController < ApplicationController
     @filters = Current.user.filters.all
     @boards = Current.user.boards.ordered_by_recently_accessed
     @tags = Tag.all.alphabetically
-    @users = User.active.alphabetically
+    @users = Current.account.users.active.alphabetically
 
     fresh_when etag: [ @filters, @boards, @tags, @users ]
   end

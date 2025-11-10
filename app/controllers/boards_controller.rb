@@ -24,7 +24,7 @@ class BoardsController < ApplicationController
   def edit
     selected_user_ids = @board.users.pluck :id
     @selected_users, @unselected_users = \
-      User.active.alphabetically.partition { |user| selected_user_ids.include? user.id }
+      @board.account.users.active.alphabetically.partition { |user| selected_user_ids.include? user.id }
   end
 
   def update
@@ -73,7 +73,7 @@ class BoardsController < ApplicationController
     end
 
     def grantees
-      User.active.where id: grantee_ids
+      @board.account.users.active.where id: grantee_ids
     end
 
     def revokees

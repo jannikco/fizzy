@@ -86,7 +86,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to edit_board_path(board)
     assert board.reload.all_access?
-    assert_equal User.active.sort, board.users.sort
+    assert_equal accounts("37s").users.active.sort, board.users.sort
   end
 
   test "destroy" do

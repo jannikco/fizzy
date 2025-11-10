@@ -25,7 +25,7 @@ class User::Filtering
   end
 
   def users
-    @users ||= User.active.alphabetically
+    @users ||= Current.account.users.active.alphabetically
   end
 
   def filters

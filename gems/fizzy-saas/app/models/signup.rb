@@ -108,8 +108,7 @@ class Signup
           membership_id: membership.id
         }
       )
-      # TODO:PLANB: we'll need to filter by account
-      @user = User.find_by!(role: :admin)
+      @user = @account.users.find_by!(role: :admin)
 
       # TODO:PLANB: remove this once board and other models have an account_id.
       #             this is needed because code will try to reference Account#entropy, previously

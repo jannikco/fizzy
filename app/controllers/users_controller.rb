@@ -20,7 +20,7 @@ class UsersController < ApplicationController
 
   private
     def set_user
-      @user = User.active.find(params[:id])
+      @user = Current.account.users.active.find(params[:id])
     end
 
     def ensure_permission_to_change_user
