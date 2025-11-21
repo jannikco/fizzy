@@ -78,6 +78,7 @@
     overflow: hidden;
     padding-block-end: 0;
     scrollbar-gutter: stable both-edges;
+    z-index: var(--z-nav);
   }
 
   .nav__scroll-container {
