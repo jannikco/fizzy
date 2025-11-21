@@ -1,8 +1,8 @@
 class Search::Record < ApplicationRecord
   include const_get(connection.adapter_name)
 
-  belongs_to :searchable, polymorphic: true, optional: true
-  belongs_to :card, optional: true
+  belongs_to :searchable, polymorphic: true
+  belongs_to :card
 
   # Virtual attributes from search query
   attribute :query, :string
