@@ -122,7 +122,7 @@ class Import
 
     def setup_account
       step("Setting up account", "Account set up in %{duration}") do
-        oldest_admin = import.users.order(id: :asc).where(role: :admin, active: true).first
+        oldest_admin = import.users.order(id: :asc).admin.first
         raise "No admin user found in the database" unless oldest_admin
 
         membership = untenanted.memberships.find(oldest_admin.membership_id)
@@ -133,7 +133,7 @@ class Import
         if Account.all.exists?(external_account_id: account.external_account_id)
           raise AccountExistsError, "Account already exists"
         else
-          @account = Account.create_with_admin_user(
+          @account = Account.create_with_owner(
             account: {
               external_account_id: account.external_account_id,
               name: account.name.truncate(255, omission: "")
@@ -144,7 +144,7 @@ class Import
             }
           )
           @tenant = @account.external_account_id
-          @admin = @account.users.find_by(role: :admin)
+          @admin = @account.users.find_by(role: :owner)
         end
 
         old_join_code = import.account_join_codes.sole

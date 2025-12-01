@@ -1,6 +1,4 @@
 <%
-  require_relative "../lib/fizzy"
-
   config_path = if Fizzy.saas?
     gem_path = Gem::Specification.find_by_name("fizzy-saas").gem_dir
     File.join(gem_path, "config", "storage.yml")

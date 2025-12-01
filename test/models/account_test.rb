@@ -12,17 +12,17 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal "/#{account.external_account_id}", account.slug
   end
 
-  test ".create_with_admin_user creates a new local account" do
+  test ".create_with_owner creates a new local account" do
     Current.without_account do
       identity = identities(:david)
       account = nil
 
       assert_changes -> { Account.count }, +1 do
         assert_changes -> { User.count }, +2 do
-          account = Account.create_with_admin_user(
+          account = Account.create_with_owner(
             account: {
-              external_account_id: ActiveRecord::FixtureSet.identify("account-create-with-admin-user-test"),
-              name: "Account Create With Admin"
+              external_account_id: ActiveRecord::FixtureSet.identify("account-create-with-owner-test"),
+              name: "Account Create With Owner"
             },
             owner: {
               name: "David",
@@ -34,13 +34,14 @@ class AccountTest < ActiveSupport::TestCase
 
       assert_not_nil account
       assert account.persisted?
-      assert_equal ActiveRecord::FixtureSet.identify("account-create-with-admin-user-test"), account.external_account_id
-      assert_equal "Account Create With Admin", account.name
+      assert_equal ActiveRecord::FixtureSet.identify("account-create-with-owner-test"), account.external_account_id
+      assert_equal "Account Create With Owner", account.name
 
-      admin = account.users.find_by(role: "admin")
-      assert_equal "David", admin.name
-      assert_equal "david@37signals.com", admin.identity.email_address
-      assert_equal "admin", admin.role
+      owner = account.users.find_by(role: "owner")
+      assert_equal "David", owner.name
+      assert_equal "david@37signals.com", owner.identity.email_address
+      assert_equal "owner", owner.role
+      assert owner.admin?, "owner should also be considered an admin"
 
       assert_predicate account.system_user, :present?
     end

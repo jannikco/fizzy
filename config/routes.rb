@@ -155,10 +155,14 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/signup/new", to: redirect("/session/new")
+  get "/signup", to: redirect("/signup/new")
 
-  namespace :signup do
-    resource :completion, only: %i[ new create ]
+  resource :signup, only: %i[ new create ] do
+    collection do
+      scope module: :signups, as: :signup do
+        resource :completion, only: %i[ new create ]
+      end
+    end
   end
 
   resource :landing

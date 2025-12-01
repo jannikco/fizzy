@@ -9,9 +9,9 @@ class Sessions::MagicLinksController < ApplicationController
   end
 
   def create
-    if identity = MagicLink.consume(code)
-      start_new_session_for identity
-      redirect_to after_authentication_url
+    if magic_link = MagicLink.consume(code)
+      start_new_session_for magic_link.identity
+      redirect_to after_sign_in_url(magic_link)
     else
       redirect_to session_magic_link_path, alert: "Try another code."
     end
@@ -20,5 +20,13 @@ class Sessions::MagicLinksController < ApplicationController
   private
     def code
       params.expect(:code)
+    end
+
+    def after_sign_in_url(magic_link)
+      if magic_link.for_sign_up?
+        new_signup_completion_path
+      else
+        after_authentication_url
+      end
     end
 end

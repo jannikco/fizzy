@@ -17,10 +17,10 @@ class Account < ApplicationRecord
   validates :name, presence: true
 
   class << self
-    def create_with_admin_user(account:, owner:)
+    def create_with_owner(account:, owner:)
       create!(**account).tap do |account|
         account.users.create!(role: :system, name: "System")
-        account.users.create!(**owner.reverse_merge(role: "admin"))
+        account.users.create!(**owner.reverse_merge(role: "owner"))
       end
     end
   end

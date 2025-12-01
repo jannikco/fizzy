@@ -41,6 +41,20 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_nil User.active.find_by(id: users(:david).id)
   end
 
+  test "admin cannot deactivate the owner" do
+    sign_in_as :kevin
+
+    assert users(:jason).owner?
+    assert users(:jason).active
+
+    assert_no_difference -> { User.active.count } do
+      delete user_path(users(:jason))
+    end
+
+    assert_response :forbidden
+    assert users(:jason).reload.active
+  end
+
   test "non-admins cannot perform actions" do
     sign_in_as :jz
 

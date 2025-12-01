@@ -2,18 +2,24 @@ module User::Role
   extend ActiveSupport::Concern
 
   included do
-    enum :role, %i[ admin member system ].index_by(&:itself), scopes: false
+    enum :role, %i[ owner admin member system ].index_by(&:itself), scopes: false
 
-    scope :member, -> { where(role: :member) }
-    scope :active, -> { where(active: true, role: %i[ admin member ]) }
+    scope :owner, -> { where(active: true, role: :owner) }
+    scope :admin, -> { where(active: true, role: %i[ owner admin ]) }
+    scope :member, -> { where(active: true, role: :member) }
+    scope :active, -> { where(active: true, role: %i[ owner admin member ]) }
+
+    def admin?
+      super || owner?
+    end
   end
 
   def can_change?(other)
-    admin? || other == self
+    (admin? && !other.owner?) || other == self
   end
 
   def can_administer?(other)
-    admin? && other != self
+    admin? && !other.owner? && other != self
   end
 
   def can_administer_board?(board)

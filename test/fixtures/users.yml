@@ -12,6 +12,13 @@ jz:
   identity: jz
   account: 37s_uuid
 
+jason:
+  id: <%= ActiveRecord::FixtureSet.identify("jason", :uuid) %>
+  name: Jason
+  role: owner
+  identity: jason
+  account: 37s_uuid
+
 kevin:
   id: <%= ActiveRecord::FixtureSet.identify("kevin", :uuid) %>
   name: Kevin

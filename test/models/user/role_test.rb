@@ -8,6 +8,56 @@ class User::RoleTest < ActiveSupport::TestCase
     assert_not users(:jz).can_administer?(users(:kevin))
   end
 
+  test "owner can administer admins and members" do
+    assert users(:jason).can_administer?(users(:kevin))
+    assert users(:jason).can_administer?(users(:david))
+    assert users(:jason).can_administer?(users(:jz))
+  end
+
+  test "owner cannot administer themselves" do
+    assert_not users(:jason).can_administer?(users(:jason))
+  end
+
+  test "admin cannot administer the owner" do
+    assert_not users(:kevin).can_administer?(users(:jason))
+  end
+
+  test "owner is included in active scope" do
+    active_users = User.active
+    assert_includes active_users, users(:jason)
+    assert_includes active_users, users(:kevin)
+    assert_includes active_users, users(:david)
+    assert_not_includes active_users, users(:system)
+  end
+
+  test "owner is also considered an admin" do
+    assert users(:jason).owner?
+    assert users(:jason).admin?
+
+    assert users(:kevin).admin?
+    assert_not users(:kevin).owner?
+  end
+
+  test "owner scope returns only active owners" do
+    owners = accounts("37s").users.owner
+    assert_includes owners, users(:jason)
+    assert_not_includes owners, users(:kevin)
+    assert_not_includes owners, users(:david)
+
+    users(:jason).update!(active: false)
+    assert_not_includes accounts("37s").users.owner, users(:jason)
+  end
+
+  test "admin scope returns active owners and admins" do
+    admins = accounts("37s").users.admin
+    assert_includes admins, users(:jason)
+    assert_includes admins, users(:kevin)
+    assert_not_includes admins, users(:david)
+
+    users(:kevin).update!(active: false)
+    assert_not_includes accounts("37s").users.admin, users(:kevin)
+  end
+
   test "can administer board?" do
     writebook_board = boards(:writebook)
     private_board = boards(:private)

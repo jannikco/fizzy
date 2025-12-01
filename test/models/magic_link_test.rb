@@ -32,8 +32,8 @@ class MagicLinkTest < ActiveSupport::TestCase
     magic_link = MagicLink.create!(identity: identities(:kevin))
     code_with_spaces = magic_link.code.downcase.chars.join(" ")
 
-    identity = MagicLink.consume(code_with_spaces)
-    assert_equal identities(:kevin), identity
+    consumed_magic_link = MagicLink.consume(code_with_spaces)
+    assert_equal magic_link, consumed_magic_link
     assert_not MagicLink.exists?(magic_link.id)
 
     expired_link = MagicLink.create!(identity: identities(:kevin))

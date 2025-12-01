@@ -1,4 +1,4 @@
-class Signup::CompletionsController < ApplicationController
+class Signups::CompletionsController < ApplicationController
   layout "public"
 
   disallow_account_scope

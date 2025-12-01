@@ -37,11 +37,11 @@ tenant = ActiveRecord::FixtureSet.identify(identifier)
 ApplicationRecord.with_tenant(tenant) do |tenant|
   Current.account.destroy!
 
-  Account.create_with_admin_user \
+  Account.create_with_owner \
     account: { name: "Company #{identifier}" },
     owner: { name: "Developer #{identifier}", email_address: "dev-#{identifier}@example.com" }
 
-  user = User.find_by(role: :admin)
+  user = User.find_by(role: :owner)
   identity = Identity.find_or_create_by(email_address: user.email_address)
   identity.link_to(user.tenant)
   Board.find_each do |board|

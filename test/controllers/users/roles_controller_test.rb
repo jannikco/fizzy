@@ -18,5 +18,29 @@ class Users::RolesControllerTest < ActionDispatch::IntegrationTest
     assert_no_changes -> { users(:david).reload.role } do
       put user_role_path(users(:david)), params: { user: { role: "system" } }
     end
+
+    assert_no_changes -> { users(:david).reload.role } do
+      put user_role_path(users(:david)), params: { user: { role: "owner" } }
+    end
+  end
+
+  test "admin cannot demote the owner" do
+    assert users(:jason).owner?
+
+    assert_no_changes -> { users(:jason).reload.role } do
+      put user_role_path(users(:jason)), params: { user: { role: "admin" } }
+    end
+
+    assert_response :forbidden
+  end
+
+  test "admin cannot change owner role to member" do
+    assert users(:jason).owner?
+
+    assert_no_changes -> { users(:jason).reload.role } do
+      put user_role_path(users(:jason)), params: { user: { role: "member" } }
+    end
+
+    assert_response :forbidden
   end
 end

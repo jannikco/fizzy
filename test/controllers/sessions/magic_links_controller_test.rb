@@ -9,17 +9,32 @@ class Sessions::MagicLinksControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "create" do
+  test "create with sign in code" do
     identity = identities(:kevin)
     magic_link = MagicLink.create!(identity: identity)
 
     untenanted do
       post session_magic_link_url, params: { code: magic_link.code }
-    end
 
-    assert_response :redirect
-    assert cookies[:session_token].present?
-    assert_not MagicLink.exists?(magic_link.id), "The magic link should be consumed"
+      assert_response :redirect
+      assert cookies[:session_token].present?
+      assert_redirected_to landing_path, "Should redirect to after authentication path"
+      assert_not MagicLink.exists?(magic_link.id), "The magic link should be consumed"
+    end
+  end
+
+  test "create with sign up code" do
+    identity = identities(:kevin)
+    magic_link = MagicLink.create!(identity: identity, purpose: :sign_up)
+
+    untenanted do
+      post session_magic_link_url, params: { code: magic_link.code }
+
+      assert_response :redirect
+      assert cookies[:session_token].present?
+      assert_redirected_to new_signup_completion_path, "Should redirect to signup completion"
+      assert_not MagicLink.exists?(magic_link.id), "The magic link should be consumed"
+    end
   end
 
   test "create with invalid code" do

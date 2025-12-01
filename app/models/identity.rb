@@ -12,8 +12,10 @@ class Identity < ApplicationRecord
 
   normalizes :email_address, with: ->(value) { value.strip.downcase.presence }
 
-  def send_magic_link
-    magic_links.create!.tap do |magic_link|
+  def send_magic_link(**attributes)
+    attributes[:purpose] = attributes.delete(:for) if attributes.key?(:for)
+
+    magic_links.create!(attributes).tap do |magic_link|
       MagicLinkMailer.sign_in_instructions(magic_link).deliver_later
     end
   end

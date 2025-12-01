@@ -55,7 +55,7 @@ Under the hood, this will create or remove `tmp/email-dev.txt`.
 
 ## Deployment
 
-We recommend [Kamal](https://kamal-deploy.org/) for deploying Fizzy. This project comes with a vanilla Rails template, you can find our production setup in [`fizzy-saas`](https://github.com/basecamp/fizzy-saas).
+We recommend [Kamal](https://kamal-deploy.org/) for deploying Fizzy. This project comes with a vanilla Rails template. You can find our production setup in [`fizzy-saas`](https://github.com/basecamp/fizzy-saas).
 
 ### Web Push Notifications
 

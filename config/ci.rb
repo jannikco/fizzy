@@ -4,6 +4,7 @@ require_relative "../lib/fizzy"
 
 OSS_ENV = "SAAS=false BUNDLE_GEMFILE=Gemfile"
 SAAS_ENV = "SAAS=true BUNDLE_GEMFILE=Gemfile.saas"
+SYSTEM_TEST_ENV = "PARALLEL_WORKERS=1" # system tests can't run reliably in parallel
 
 CI.run do
   step "Setup", "bin/setup --skip-server"
@@ -16,11 +17,15 @@ CI.run do
   step "Security: Gitleaks audit", "bin/gitleaks-audit"
 
   if Fizzy.saas?
-    step "Tests: SaaS", "#{SAAS_ENV} bin/rails test:all"
-    step "Tests: SQLite", "#{OSS_ENV} DATABASE_ADAPTER=sqlite bin/rails test:all"
+    step "Tests: SaaS",          "#{SAAS_ENV} bin/rails test"
+    step "Tests: SaaS System",   "#{SAAS_ENV} #{SYSTEM_TEST_ENV} bin/rails test:system"
+    step "Tests: SQLite",        "#{OSS_ENV} DATABASE_ADAPTER=sqlite bin/rails test"
+    step "Tests: SQLite System", "#{OSS_ENV} DATABASE_ADAPTER=sqlite #{SYSTEM_TEST_ENV} bin/rails test:system"
   else
-    step "Tests: MySQL", "#{OSS_ENV} DATABASE_ADAPTER=mysql bin/rails test:all"
-    step "Tests: SQLite", "#{OSS_ENV} DATABASE_ADAPTER=sqlite bin/rails test:all"
+    step "Tests: MySQL",         "#{OSS_ENV} DATABASE_ADAPTER=mysql bin/rails test"
+    step "Tests: MySQL System",  "#{OSS_ENV} DATABASE_ADAPTER=mysql #{SYSTEM_TEST_ENV} bin/rails test:system"
+    step "Tests: SQLite",        "#{OSS_ENV} DATABASE_ADAPTER=sqlite bin/rails test"
+    step "Tests: SQLite System", "#{OSS_ENV} DATABASE_ADAPTER=sqlite #{SYSTEM_TEST_ENV} bin/rails test:system"
   end
 
   if success?

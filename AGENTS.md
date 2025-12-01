@@ -68,7 +68,7 @@ Fizzy uses **URL path-based multi-tenancy**:
 
 **Passwordless magic link authentication**:
 - Global `Identity` (email-based) can have `Users` in multiple Accounts
-- Users belong to an Account and have roles: admin, member, system
+- Users belong to an Account and have roles: owner, admin, member, system
 - Sessions managed via signed cookies
 - Board-level access control via `Access` records
 
@@ -84,7 +84,7 @@ Fizzy uses **URL path-based multi-tenancy**:
 
 **User** → Account membership
 - Belongs to Account and Identity
-- Has role (admin/member/system)
+- Has role (owner/admin/member/system)
 - Board access via explicit `Access` records
 
 **Board** → Primary organizational unit

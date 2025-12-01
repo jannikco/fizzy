@@ -8,4 +8,8 @@ require_relative "../config/boot"
 
 require "rails/commands"
 
-Fizzy::Saas.append_test_paths if Fizzy.saas? && Rails.env.test?
+if Fizzy.saas? && ENV["RAILS_ENV"] == "test"
+  # the app is not loaded by rails/commands if there are additional arguments to "rails test"
+  require APP_PATH
+  Fizzy::Saas.append_test_paths
+end

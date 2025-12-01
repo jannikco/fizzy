@@ -17,7 +17,7 @@ else
     identity = Identity.find_or_create_by!(email_address: email_address)
 
     unless account = Account.find_by(external_account_id: tenant_id)
-      account = Account.create_with_admin_user(
+      account = Account.create_with_owner(
         account: {
           external_account_id: tenant_id,
           name: signal_account_name

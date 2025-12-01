@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/basecamp/fizzy-saas
-  revision: 7f392bbbf9f5170d334b6ee2f6d240569bd157ed
+  revision: 130c8b23f9861a89feb59ca68f192bd05d51310c
   specs:
     fizzy-saas (0.1.0)
       prometheus-client-mmap
@@ -16,7 +16,7 @@ GIT
       yabeda-http_requests
       yabeda-prometheus-mmap
       yabeda-puma-plugin
-      yabeda-rails
+      yabeda-rails (>= 0.10)
 
 GIT
   remote: https://github.com/basecamp/queenbee-plugin
@@ -52,7 +52,7 @@ GIT
 
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 4f7ab01bb5d6be78c7447dbb230c55027d08ae34
+  revision: 690ec8898318b8f50714e86676353ebe1551261e
   branch: main
   specs:
     actioncable (8.2.0.alpha)
@@ -423,7 +423,7 @@ GEM
     rake-compiler-dock (1.9.1)
     rb_sys (0.9.117)
       rake-compiler-dock (= 1.9.1)
-    rdoc (6.15.1)
+    rdoc (6.16.1)
       erb
       psych (>= 4.0.0)
       tsort
@@ -479,10 +479,10 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sentry-rails (6.1.1)
+    sentry-rails (6.2.0)
       railties (>= 5.2.0)
-      sentry-ruby (~> 6.1.1)
-    sentry-ruby (6.1.1)
+      sentry-ruby (~> 6.2.0)
+    sentry-ruby (6.2.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sniffer (0.5.0)

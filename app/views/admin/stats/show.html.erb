@@ -70,7 +70,7 @@
 
     <ul class="margin-block-half">
       <% @top_accounts.each do |account| %>
-        <% admin_user = account.users.find { |u| u.role == "admin" } %>
+        <% admin_user = account.users.owner.first %>
         <li class="flex align-start gap-half margin-block-start-half">
           <div
             class="flex-item-grow min-width overflow-ellipsis"
