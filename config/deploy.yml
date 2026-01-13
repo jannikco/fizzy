@@ -42,6 +42,7 @@ env:
     S3_FORCE_PATH_STYLE: "false"
     S3_REQUEST_CHECKSUM_CALCULATION: when_required
     S3_RESPONSE_CHECKSUM_VALIDATION: when_required
+    CSP_CONNECT_SRC: https://profectify-planner.eu-central-1.linodeobjects.com
 
 
 #-- General configuration --#
