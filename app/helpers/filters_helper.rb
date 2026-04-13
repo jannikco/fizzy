@@ -12,7 +12,7 @@ module FiltersHelper
   end
 
   def filter_selected_boards_title(user_filtering)
-    user_filtering.selected_board_titles.collect { tag.strong it }.to_sentence.html_safe
+    user_filtering.selected_board_titles.collect { tag.strong _1 }.to_sentence.html_safe
   end
 
   def filter_place_menu_item(path, label, icon, new_window: false, current: false, turbo: true)

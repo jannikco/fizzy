@@ -20,7 +20,7 @@ module AvatarsHelper
   end
 
   def avatar_tags(users, **options)
-    users.collect { avatar_tag(it, **options) }.join.html_safe
+    users.collect { avatar_tag(_1, **options) }.join.html_safe
   end
 
   def mail_avatar_tag(user, size: 48, **options)

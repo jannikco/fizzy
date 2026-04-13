@@ -45,7 +45,7 @@ else
   end
 
   def create_board(name, creator: Current.user, all_access: true, access_to: [])
-    Board.find_or_create_by!(name:, creator:, all_access:).tap { it.accesses.grant_to(access_to) }
+    Board.find_or_create_by!(name:, creator:, all_access:).tap { _1.accesses.grant_to(access_to) }
   end
 
   def create_card(title, board:, description: nil, status: :published, creator: Current.user)

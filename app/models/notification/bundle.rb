@@ -22,7 +22,7 @@ class Notification::Bundle < ApplicationRecord
   class << self
     def deliver_all
       due.in_batches do |batch|
-        jobs = batch.collect { DeliverJob.new(it) }
+        jobs = batch.collect { DeliverJob.new(_1) }
         ActiveJob.perform_all_later jobs
       end
     end
