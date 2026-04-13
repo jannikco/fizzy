@@ -12,6 +12,6 @@ module Filterable
     # FIXME: This is too inefficient to have part of a destroy transaction.
     # Need to find a way to use a job or a single query.
     def remove_from_filters
-      filters.each { it.resource_removed self }
+      filters.each { _1.resource_removed self }
     end
 end

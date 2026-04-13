@@ -19,7 +19,7 @@ class User::DayTimeline::Column
   end
 
   def events_by_hour
-    limited_events.group_by { it.created_at.hour }
+    limited_events.group_by { _1.created_at.hour }
   end
 
   def has_more_events?

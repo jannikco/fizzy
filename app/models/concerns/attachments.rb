@@ -44,7 +44,7 @@ module Attachments
   private
     def rich_text_record
       @rich_text_record ||= begin
-        association = self.class.reflect_on_all_associations(:has_one).find { it.klass == ActionText::RichText }
+        association = self.class.reflect_on_all_associations(:has_one).find { _1.klass == ActionText::RichText }
         public_send(association.name)
       end
     end
