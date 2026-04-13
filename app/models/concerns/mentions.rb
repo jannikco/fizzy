@@ -23,7 +23,7 @@ module Mentions
     end
 
     def mentionees_from_attachments
-      rich_text_associations.flat_map { send(_1.name)&.body&.attachments&.collect { _1.attachable } }.compact
+      rich_text_associations.flat_map { |assoc| send(assoc.name)&.body&.attachments&.collect { _1.attachable } }.compact
     end
 
     def mentionable_users
