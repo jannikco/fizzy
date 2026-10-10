@@ -36,6 +36,9 @@
 
 /public/assets
 
+# Ignore Kamal secrets (contains real deploy credentials).
+/.kamal/secrets
+
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 

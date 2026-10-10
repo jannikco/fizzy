@@ -9,8 +9,8 @@ module MagicLink::Code
     def sanitize(code)
       if code.present?
         normalize_code(code)
-          .then { apply_substitutions(it) }
-          .then { remove_invalid_characters(it) }
+          .then { apply_substitutions(_1) }
+          .then { remove_invalid_characters(_1) }
       end
     end
 
